@@ -90,10 +90,7 @@ function AudioManager() {
       const formData = new FormData();
       formData.append("audio", audioData.blob);
 
-      const transcription = await axios.post(
-        "http://localhost:3000/transcribe",
-        formData
-      );
+      const transcription = await axios.post("/transcribe", formData);
       if (transcription) {
         setTranscript(transcription.data);
         setLoading(false);
@@ -105,7 +102,7 @@ function AudioManager() {
     if (!systemPrompt || !userPrompt) {
       return;
     }
-    const summary = await axios.post("http://localhost:3000/summarize", {
+    const summary = await axios.post("/summarize", {
       systemPrompt,
       userPrompt,
       transcript,
