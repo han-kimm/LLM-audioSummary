@@ -90,7 +90,10 @@ function AudioManager() {
       const formData = new FormData();
       formData.append("audio", audioData.blob);
 
-      const transcription = await axios.post("/transcribe", formData);
+      const transcription = await axios.post(
+        `${process.env.NEXT_PUBLIC_PUBLIC_URL}/transcribe`,
+        formData
+      );
       if (transcription) {
         setTranscript(transcription.data);
         setLoading(false);
@@ -102,11 +105,14 @@ function AudioManager() {
     if (!systemPrompt || !userPrompt) {
       return;
     }
-    const summary = await axios.post("/summarize", {
-      systemPrompt,
-      userPrompt,
-      transcript,
-    });
+    const summary = await axios.post(
+      `${process.env.NEXT_PUBLIC_PUBLIC_URL}/summarize`,
+      {
+        systemPrompt,
+        userPrompt,
+        transcript,
+      }
+    );
 
     setSummary(summary.data);
   };
@@ -126,7 +132,7 @@ function AudioManager() {
             텍스트로 변환하기
           </Button>
           {loading ? <p>로딩중...</p> : null}
-          {transcript ? (
+          {!!transcript && (
             <>
               <div className="bg-gray-200 p-4 rounded-lg">
                 <p>{transcript}</p>
@@ -135,7 +141,7 @@ function AudioManager() {
                 <div className="flex flex-col w-full gap-12 justify-center">
                   <hr />
                   <div>
-                    <p>시스템 프롬프트</p>
+                    <p className="font-bold text-[20px]">시스템 프롬프트</p>
                     <textarea
                       value={systemPrompt}
                       onChange={(e) => setSystemPrompt(e.target.value)}
@@ -143,7 +149,7 @@ function AudioManager() {
                     />
                   </div>
                   <div>
-                    <p>유저 프롬프트</p>
+                    <p className="font-bold text-[20px]">유저 프롬프트</p>
                     <textarea
                       value={userPrompt}
                       onChange={(e) => setUserPrompt(e.target.value)}
@@ -157,12 +163,12 @@ function AudioManager() {
                 요약하기
               </Button>
               {summary && (
-                <div className="bg-gray-200 p-4 rounded-lg whitespace-pre">
+                <div className="bg-gray-200 p-4 rounded-lg whitespace-preline">
                   <p>{summary}</p>
                 </div>
               )}
             </>
-          ) : null}
+          )}
         </>
       )}
     </Box>
