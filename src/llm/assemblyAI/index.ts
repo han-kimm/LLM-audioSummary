@@ -5,9 +5,11 @@ export class AssemblyAILLM {
   private config: {
     audio: string | ArrayBuffer | Blob;
     speaker_labels: boolean;
+    language_detection: boolean;
   } = {
     audio: "",
     speaker_labels: true,
+    language_detection: true,
   };
 
   constructor(apiKey: string) {
