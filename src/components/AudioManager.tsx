@@ -44,6 +44,44 @@ function AudioManager() {
   }, [transcript]);
 
   // handlers
+  const handleChange = () => {
+    const elem = document.createElement("input");
+    elem.type = "file";
+    elem.oninput = (event) => {
+      const files = (event.target as HTMLInputElement).files;
+      if (!files) return;
+
+      const file = files[0];
+
+      const urlObj = URL.createObjectURL(file);
+
+      const mimeType = file.type;
+
+      const reader = new FileReader();
+      reader.addEventListener("load", async (e) => {
+        const arrayBuffer = e.target?.result as ArrayBuffer;
+        if (!arrayBuffer) return;
+
+        const audioCTX = new AudioContext({
+          sampleRate: SAMPLING_RATE,
+        });
+
+        const decoded = await audioCTX.decodeAudioData(arrayBuffer);
+
+        setAudioData({
+          buffer: decoded,
+          url: urlObj,
+          blob: file,
+          mimeType: mimeType,
+        });
+      });
+      reader.readAsArrayBuffer(files[0]);
+
+      elem.value = "";
+    };
+
+    elem.click();
+  };
 
   const getTranscription = async () => {
     if (audioData) {
@@ -81,7 +119,7 @@ function AudioManager() {
 
   return (
     <Box display="flex" flexDirection="column" gap="1rem">
-      <Button onClick={() => {}} variant="contained">
+      <Button onClick={handleChange} variant="contained">
         파일 업로드
       </Button>
       {audioData?.url && (
