@@ -25,7 +25,7 @@ function AudioManager() {
   const [systemPrompt, setSystemPrompt] =
     useState<string>(`우리는 쓰레기 수거업자와 배출자를 연결해주는 서비스 Haulla를 운영하고 있습니다.
   당신은 우리의 요약 전문 비서입니다. 고객이 우리의 서비스에 우호적인지 "고객 우호도:"로 시작하는 1문장으로 요약하고, 전화 내용을 "통화 요약:"으로 시작하는 1문장으로 알려주세요.
-  영업 담당자가 취할 수 있는 미래 영업 전략이나 CS 전략을 "앞으로의 전략:"으로 시작하는 1문장으로 제안해주세요.
+  영업 담당자가 취할 수 있는 미래 영업 전략이나  CS 전략을 "앞으로의 전략:"으로 시작하는 1문장으로 제안해주세요.
 `);
   const [userPrompt, setUserPrompt] = useState<string>("");
   const [summary, setSummary] = useState<string>("");
