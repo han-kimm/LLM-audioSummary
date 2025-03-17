@@ -4,6 +4,7 @@ import { Box, Button } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { AudioPlayer } from "./AudioPlayer";
+import { Summary } from "./Summary";
 
 const SAMPLING_RATE = 16000;
 
@@ -83,54 +84,32 @@ function AudioManager() {
       <Button onClick={() => {}} variant="contained">
         파일 업로드
       </Button>
-      {audioData?.url && (
-        <>
-          <AudioPlayer
-            audioUrl={audioData?.url ?? ""}
-            mimeType={audioData?.mimeType ?? ""}
-          />
-          <Button onClick={getTranscription} variant="contained">
-            텍스트로 변환하기
-          </Button>
-          {loading ? <p>로딩중...</p> : null}
-          {!!transcript && (
-            <>
-              <div className="bg-gray-200 p-4 rounded-lg">
-                <p>{transcript}</p>
-              </div>
-              <div>
-                <div className="flex flex-col w-full gap-12 justify-center">
-                  <hr />
-                  <div>
-                    <p className="font-bold text-[20px]">시스템 프롬프트</p>
-                    <textarea
-                      value={systemPrompt}
-                      onChange={(e) => setSystemPrompt(e.target.value)}
-                      className="text-black border border-black w-full h-32 p-4 rounded-lg"
-                    />
-                  </div>
-                  <div>
-                    <p className="font-bold text-[20px]">유저 프롬프트</p>
-                    <textarea
-                      value={userPrompt}
-                      onChange={(e) => setUserPrompt(e.target.value)}
-                      placeholder="유저 프롬프트"
-                      className="text-black border border-black w-full h-32 p-4 rounded-lg"
-                    />
-                  </div>
-                </div>
-              </div>
-              <Button onClick={getSummary} variant="contained">
-                요약하기
-              </Button>
-              {summary && (
-                <div className="bg-gray-200 p-4 rounded-lg whitespace-preline">
-                  <p>{summary}</p>
-                </div>
-              )}
-            </>
-          )}
-        </>
+      <AudioPlayer
+        audioUrl={audioData?.url ?? ""}
+        mimeType={audioData?.mimeType ?? ""}
+      />
+      <Button onClick={getTranscription} variant="contained">
+        텍스트로 변환하기
+      </Button>
+      {loading ? <p>로딩중...</p> : null}
+      {!!transcript && (
+        <div className="bg-gray-200 p-4 rounded-lg">
+          <p>{transcript}</p>
+        </div>
+      )}
+      {!!transcript && (
+        <Summary
+          systemPrompt={systemPrompt}
+          setSystemPrompt={setSystemPrompt}
+          userPrompt={userPrompt}
+          setUserPrompt={setUserPrompt}
+          onClickSummary={getSummary}
+        />
+      )}
+      {!!summary && (
+        <div className="bg-gray-200 p-4 rounded-lg whitespace-preline">
+          <p>{summary}</p>
+        </div>
       )}
     </Box>
   );
